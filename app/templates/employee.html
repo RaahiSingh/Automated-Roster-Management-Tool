@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee Shift Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow p-4">
+
+    {% if not name or not signum %}
+    <h3 class="mb-4">Enter Employee Details</h3>
+    <form method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="signum" class="form-label">Signum</label>
+        <input type="text" class="form-control" name="signum" required>
+      </div>
+      <button type="submit" class="btn  
+      btn-primary">Next</button>
+</form>
+
+    <!-- <a href="{{ url_for('employee.leave_apply') }}" class="btn btn-success mt-3">
+     Apply for leave
+    </a> -->
+
+    {% elif not month or not year %}
+  <h3 class="mb-4">Welcome {{ name }} ({{ signum }})</h3>
+  <form method="POST">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="signum" value="{{ signum }}">
+
+    <!-- Month Dropdown -->
+    <div class="mb-3">
+      <label for="month" class="form-label">Month</label>
+      <select name="month" id="month" class="form-select" required>
+        <option value="" disabled selected>Select month</option>
+        <option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+      </select>
+    </div>
+
+    <!-- Year Dropdown -->
+    <div class="mb-3">
+      <label for="year" class="form-label">Year</label>
+      <select name="year" id="year" class="form-select" required>
+        <option value="" disabled selected>Select year</option>
+        {% for y in range(2024, 2031) %}
+          <option value="{{ y }}">{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Show Shifts</button>
+</form>
+{% if summary %}
+<div class="summary">
+    <h3>Shift Summary</h3>
+    <ul>
+        <li>Total On Call: {{ summary.on_call }}</li>
+        <li>Total Night: {{ summary.night }}</li>
+        <li>Total Evening: {{ summary.evening }}</li>
+        <li>Total Morning: {{ summary.morning }}</li>
+        <li>Total Leave (planned + unplanned): {{ summary.leave }}</li>
+    </ul>
+</div>
+{% else %}
+<p>No shift summary available.</p>
+{% endif %}
+
+
+    {% else %}
+    <h3 class="mb-3">Shift Details for {{ name }} ({{ signum }})</h3>
+    <h5 class="text-muted">{{ month_year }}</h5>
+
+    {% if shifts %}
+      {% for shift, dates in shifts.items() %}
+        {% if dates %}
+        <div class="mt-4">
+          <h5>{{ shift }} Shift</h5>
+          <ul class="list-group">
+            {% for date in dates %}
+              <li class="list-group-item">{{ date }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      {% endfor %}
+     
+    <a href="{{ url_for('employee.download_original_excel') }}" class="btn btn-success mt-3">
+     Download Original Excel
+    </a>
+</form>
+
+    {% else %}
+      <p class="text-danger">No shifts found.</p>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

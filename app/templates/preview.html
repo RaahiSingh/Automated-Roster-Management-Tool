@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Shift Updates</title>
+</head>
+<body>
+    <h2>Preview Shift Updates</h2>
+
+    {% if data %}
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Signum</th>
+                <th>Date</th>
+                <th>Shift</th>
+                <th>Month</th>
+                <th>Year</th>
+            </tr>
+            {% for entry in data %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.signum }}</td>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.shift }}</td>
+                <td>{{ entry.month }}</td>
+                <td>{{ entry.year }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <form method="POST" action="{{ url_for('lead.edit_shift') }}">
+            <input type="hidden" name="confirm" value="true">
+            <button type="submit">Confirm & Save</button>
+        </form>
+    {% else %}
+        <p>No data to preview.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('lead.edit_shift') }}">← Back to Lead Portal</a>
+</body>
+</html>

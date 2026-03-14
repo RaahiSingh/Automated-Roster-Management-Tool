@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Upload Template{% endblock %}
+
+{% block content %}
+  <h2>Upload Excel File</h2>
+  <label for="excel-file">Select an Excel File:</label>
+  <input type="file" id="excel-file" name="file" accept=".xlsx,.xls" class="form-control" />
+  <button id="submit" class="btn btn-primary mt-2">Submit</button>
+  <p id="status" class="mt-3"></p>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById("submit").addEventListener("click", async () => {
+    const fileInput = document.getElementById("excel-file");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      document.getElementById("status").textContent = "Please select a file first.";
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    document.getElementById("status").textContent = "Uploading...";
+
+    try {
+      const response = await fetch("/team", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.text();
+      document.getElementById("status").textContent = result;
+    } catch (error) {
+      document.getElementById("status").textContent = "Error: " + error.message;
+    }
+  });
+</script>
+{% endblock %}

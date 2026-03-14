@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROOSTER</title>
+  <style>
+    body{ font-family: 'Times New Roman', Times, serif; margin: 40px}
+    .excel-file {
+      align-items: center;
+      display:flex;
+      margin-top: 20px;
+      margin-bottom:10px;
+    }
+
+    h2{
+      font-size:50px;
+      justify-content: center;
+      align-items: center;
+
+    }
+  </style>
+</head>
+<body>
+  <h2>Upload Roster Excel File</h2>
+  <input type="file" id="excel-file" accept=".xlsx"/>
+  <br/>
+  <button id="send-button"> Send Email</button>
+  <p id="status"></p>  
+
+
+  <script>
+    document.getElementById('send-button').addEventListener('click', async()=>{
+      
+      const fileInput=document.getElementById('excel-file');      const file=fileInput.files[0];
+
+      if(!file){
+        document.getElementById('status'),innerText="Please selecct a file first.";
+        return;
+      }
+      const formData= new FormData();
+      formData.append('file', file);
+
+      document.getElementById('status').innerText="Sending email...";
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.text();
+        document.getElementById('status').textContent = result;
+      } catch (error) {
+        document.getElementById('status').textContent = "Error: " + error.message;
+      }
+
+
+
+
+    })
+
+
+
+  </script>
+</body>
+</html>

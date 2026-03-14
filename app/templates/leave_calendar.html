@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Calendar</title>
+</head>
+<body>
+    <h2>Leave Calendar</h2>
+
+    {% if calendar %}
+        <table border="1" cellpadding="10">
+            <tr><th>From</th><th>To</th><th>Employee</th><th>Type</th><th>Status</th></tr>
+            {% for leaves in calendar %}
+            <tr>
+                <td>{{ leaves.start }}</td>
+                <td>{{ leaves.end }}</td>
+                <td>{{ leaves.name }}</td>
+                <td>{{ leaves.type }}</td>
+                <td>{{ leaves.status }}</td>
+            </tr>
+            {% endfor %}
+        </table> 
+    {% else %}
+        <p>No leave data available.</p>
+    {% endif %}
+    
+    <br><a href="{{ url_for('lead.view_pending_leaves') }}">← Back to Leave Requests</a>
+</body>
+</html>

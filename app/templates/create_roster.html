@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Roster{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Create Roster</h2>
+
+  <form method="POST">
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <label for="group" class="form-label">Group</label>
+        <select name="group" class="form-select" required>
+          <option value="Testing">Testing</option>
+          <option value="Config">Config</option>
+          <option value="Developer">Developer</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="month" class="form-label">Month</label>
+        <select name="month" class="form-select" required>
+          {% for month in ['January', 'February', 'March', 'April', 'May', 'June',
+                          'July', 'August', 'September', 'October', 'November', 'December'] %}
+            <option value="{{ month }}" {% if selected_month == month %}selected{% endif %}>{{ month }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="year" class="form-label">Year</label>
+        <select name="year" class="form-select" required>
+          {% for yr in range(2024, 2027) %}
+            <option value="{{ yr }}" {% if selected_year == yr %}selected{% endif %}>{{ yr }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generate Roster Table</button>
+  </form>
+
+  <hr>
+
+  <h5>Create Roster for -</h5>
+  {% if session.get('team_data') and days %}
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>Signum</th>
+          <th>Location</th>
+          {% for day in days %}
+          <th>{{ day.date }}<br><small>{{ day.weekday }}</small></th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in session.team_data %}
+        <tr>
+          <td>{{ member['Function'] }}</td>
+          <td>{{ member['Signum'] }}</td>
+          <td>{{ member['Location'] }}</td>
+          {% for day in days %}
+          <td>
+            <select name="shift_{{ member['Signum'] }}_{{ day.date }}" class="form-select">
+              <option value="">--</option>
+              <option value="M">M</option>
+              <option value="E">E</option>
+              <option value="N">N</option>
+              <option value="OC">OC</option>
+              <option value="G">G</option>
+              <option value="L">L</option>
+              <option value="H">H</option>
+            </select>
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <button type="submit" class="btn btn-success">Submit Roster</button>
+  {% else %}
+  <div class="alert alert-warning">Please upload the team template and select month/year to proceed.</div>
+  {% endif %}
+</div>
+{% endblock %}

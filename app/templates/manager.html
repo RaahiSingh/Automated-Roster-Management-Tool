@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Manager Dashboard</h2>
+
+<form method="POST">
+    <label>Enter Team Name:</label>
+    <input type="text" name="team" required>
+    <button type="submit">Next</button>
+</form>
+
+{% if team_name %}
+<hr>
+<h3>Enter Team Member Details for {{ team_name }}</h3>
+<form method="POST">
+    <input type="hidden" name="team_name" value="{{ team_name }}">
+    {% for i in range(1, 13) %}
+    <fieldset>
+        <legend>Member {{ i }}</legend>
+        <input type="text" name="name{{ i }}" placeholder="Name">
+        <input type="text" name="signum{{ i }}" placeholder="Signum">
+        <input type="text" name="location{{ i }}" placeholder="Location">
+        <input type="text" name="function{{ i }}" placeholder="Function">
+    </fieldset>
+    {% endfor %}
+    <button type="submit">Generate Excel</button>
+</form>
+{% endif %}
+
+<hr>
+<a href="{{ url_for('manager.manager_analytics') }}">📊 View Analytics</a>
+{% endblock %}

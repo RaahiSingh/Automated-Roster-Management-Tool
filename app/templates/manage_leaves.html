@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Pending Leave Requests</title></head>
+<body>
+  <h2>Pending Leave Requests</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div style="color: green;">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  {% for req in leaves %}
+    <div style="margin-bottom: 20px;">
+      <p><strong>{{ req.name }} ({{ req.signum }})</strong></p>
+      <p>From: {{ req.start }} to {{ req.end }} | Type: {{ req.type }} | Status: {{ req.status }}</p>
+
+      {% if req.status == 'Pending' %}
+        <form method="POST">
+          <input type="hidden" name="signum" value="{{ req.signum }}">
+          <button name="action" value="approve">Approve</button>
+          <button name="action" value="reject">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+  {% endfor %}
+</body>
+</html>

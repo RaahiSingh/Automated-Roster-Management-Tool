@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Lead Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Lead Portal</h2>
+
+  <form method="POST" class="mb-5">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <h5>Select Month & Year</h5>
+        <div class="row">
+          <div class="col">
+            <label for="month" class="form-label">Month</label>
+            <select id="month" name="month" class="form-select" required>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="year" class="form-label">Year</label>
+            <select id="year" name="year" class="form-select" required>
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h5>Edit Shift for Employee</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="signum" class="form-label">Signum</label>
+        <input type="text" name="signum" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="date" class="form-label">Date (e.g., 10)</label>
+        <input type="text" name="date" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="shift" class="form-label">Shift</label>
+        <select name="shift" class="form-select" required>
+          <option value="OC">OC</option>
+          <option value="G">G</option>
+          <option value="E1">E1</option>
+          <option value="E2">E2</option>
+          <option value="N">N</option>
+          <option value="L">L</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Shift</button>
+  </form>
+
+  {% if session.bulk_shift_data %}
+    <form method="GET" action="{{ url_for('lead.preview') }}">
+      <button type="submit" class="btn btn-outline-info">Preview Pending Updates</button>
+    </form>
+  {% endif %}
+
+  {% if message %}
+    <div class="alert alert-info mt-4">
+      <strong>{{ message }}</strong>
+    </div>
+  {% endif %}
+</div>
+<a href="{{ url_for('lead.lead_analytics') }}">📊 View Analytics</a>
+{% endblock %}
+<a href="{{ url_for('lead.leaves') }}">🗓️ Manage Leave Requests</a>
+
